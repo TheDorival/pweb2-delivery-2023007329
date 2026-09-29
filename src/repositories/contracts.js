@@ -69,6 +69,13 @@
  * @returns {Entrega}
  */
 
+/**
+ * @function
+ * @name IEntregasRepository#deletar
+ * @param {number} id
+ * @returns {Promise<boolean>} true se removeu, false se não existia
+ */
+
 
 /**
  * contrato de persistencia de motoristas
