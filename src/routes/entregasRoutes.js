@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { Database } from "../database/database.js";
 import { EntregasRepository } from "../repositories/entregasRepository.js";
-import { EntregaService } from "../services/entregasService.js";
+import { EntregasService } from "../services/entregasService.js";
 import { EntregasController } from "../controllers/entregasController.js";
 
 
 const database = new Database();
 const repositorio = new EntregasRepository(database);
-const servico = new EntregaService(repositorio);
+const servico = new EntregasService(repositorio);
 const controller = new EntregasController(servico);
 
 const router = Router();
