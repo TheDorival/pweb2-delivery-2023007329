@@ -37,6 +37,48 @@ export class EntregaService {
     return await this.repositorio.atualizar(id, alteracoes);
   }
 
+  async avancar(id) {
+    const entrega = await this.buscarPorId(id);
+
+    if (entrega.status === "CRIADA") {
+      return await this.atualizar(id, {
+        status: "EM_TRANSITO",
+        historico: [
+          ...entrega.historico,
+          { data: new Date().toISOString(), descricao: "transitar" },
+        ],
+      });
+    }
+
+    if (entrega.status === "EM_TRANSITO") {
+      return await this.atualizar(id, {
+        status: "ENTREGUE",
+        historico: [
+          ...entrega.historico,
+          { data: new Date().toISOString(), descricao: "entregar" },
+        ],
+      });
+    }
+
+    throw new AppError("Entrega já foi finalizada", 422);
+  }
+
+  async cancelar(id) {
+    const entrega = await this.buscarPorId(id);
+
+    if (entrega.status === "ENTREGUE" || entrega.status === "CANCELADA") {
+      throw new AppError("Entrega já foi finalizada", 422);
+    }
+
+    return await this.atualizar(id, {
+      status: "CANCELADA",
+      historico: [
+        ...entrega.historico,
+        { data: new Date().toISOString(), descricao: "cancelar" },
+      ],
+    });
+  }
+
   async deletar(id) {
     await this.buscarPorId(id);
     return await this.repositorio.deletar(id);
