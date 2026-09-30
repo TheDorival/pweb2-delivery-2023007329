@@ -13,16 +13,7 @@ export class EntregasController {
     });
 
     listar = asyncHandler(async (req, res) => {
-        const entregas = await this.servico.listar();
-
-        if (req.query.status) {
-            const entregasFiltradas = entregas.filter(
-                (entrega) => entrega.status === req.query.status,
-            );
-            res.json(entregasFiltradas)
-            return
-        }
-
+        const entregas = await this.servico.listar({ status: req.query.status });
         res.json(entregas);
     });
 
