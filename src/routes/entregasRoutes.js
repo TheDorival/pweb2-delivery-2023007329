@@ -3,7 +3,7 @@ import { Database } from "../database/database.js";
 import { EntregasRepository } from "../repositories/entregasRepository.js";
 import { EntregasService } from "../services/entregasService.js";
 import { EntregasController } from "../controllers/entregasController.js";
-
+import { validarCamposEntrega } from "../middlewares/validarCamposEntrega.js";
 
 const database = new Database();
 const repositorio = new EntregasRepository(database);
@@ -12,7 +12,7 @@ const controller = new EntregasController(servico);
 
 const router = Router();
 
-router.post("/", controller.criar);
+router.post("/", validarCamposEntrega, controller.criar);
 
 router.get("/", controller.listar);
 
