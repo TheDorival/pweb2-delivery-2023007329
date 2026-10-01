@@ -1,27 +1,23 @@
 import { Router } from "express";
-import { Database } from "../database/database.js";
-import { EntregasRepository } from "../repositories/entregasRepository.js";
-import { EntregasService } from "../services/entregasService.js";
-import { EntregasController } from "../controllers/entregasController.js";
 import { validarCamposEntrega } from "../middlewares/validarCamposEntrega.js";
 
-const database = new Database();
-const repositorio = new EntregasRepository(database);
-const servico = new EntregasService(repositorio);
-const controller = new EntregasController(servico);
+/** @param {import('../controllers/entregasController.js').EntregasController} controller */
+export function criarEntregasRoutes(controller) {
+  const router = Router();
 
-const router = Router();
+  router.post("/", validarCamposEntrega, controller.criar);
 
-router.post("/", validarCamposEntrega, controller.criar);
+  router.get("/", controller.listar);
 
-router.get("/", controller.listar);
+  router.get("/:id", controller.buscarPorId);
 
-router.get("/:id", controller.buscarPorId);
+  router.patch("/:id/avancar", controller.avancar);
 
-router.patch("/:id/avancar", controller.avancar);
+  router.patch("/:id/cancelar", controller.cancelar);
 
-router.patch("/:id/cancelar", controller.cancelar);
+  router.patch("/:id/atribuir", controller.atribuir);
 
-router.get("/:id/historico", controller.listarHistorico);
+  router.get("/:id/historico", controller.listarHistorico);
 
-export default router;
+  return router;
+}
