@@ -100,4 +100,31 @@ export class EntregasService {
     await this.buscarPorId(id);
     return await this.entregasRepo.deletar(id);
   }
+
+  async atribuirMotorista(id, motoristaId) {
+    if (motoristaId === undefined || motoristaId === null) {
+      throw new AppError("motoristaId é obrigatório", 400);
+    }
+
+    const entrega = await this.buscarPorId(id);
+
+    const motorista = await this.motoristasRepo.buscarPorId(motoristaId);
+    if (!motorista) throw new AppError("Motorista não foi encontrado", 404);
+
+    if (entrega.status !== "CRIADA") {
+      throw new AppError("Entrega precisa estar CRIADA para receber um motorista", 422);
+    }
+
+    if (motorista.status === "INATIVO") {
+      throw new AppError("Motorista INATIVO não pode ser atribuído", 422);
+    }
+
+    return await this.atualizar(id, {
+      motoristaId: motorista.id,
+      historico: [
+        ...entrega.historico,
+        { data: new Date().toISOString(), descricao: "atribuir motorista" },
+      ],
+    });
+  }
 }

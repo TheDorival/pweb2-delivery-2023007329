@@ -41,4 +41,11 @@ export class EntregasController {
         const entrega =  await this.servico.buscarPorId(Number(id));
         res.json(entrega.historico)
     });
+
+    atribuir = asyncHandler(async (req, res) => {
+        const { id } = req.params;
+        const { motoristaId } = req.body;
+        const entregaAtualizada = await this.servico.atribuirMotorista(Number(id), motoristaId);
+        res.json(entregaAtualizada);
+    });
 }
