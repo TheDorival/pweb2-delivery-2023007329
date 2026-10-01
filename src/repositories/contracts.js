@@ -50,14 +50,14 @@
 /**
  * @function
  * @name IEntregasRepository#buscarPorId
- * @param {Omit<Entrega, 'id'>} dados
+ * @param {number} id
  * @returns {Entrega|null}
  */
 
 /**
  * @function
  * @name IEntregasRepository#criar
- * @param {Omit<Entrega, 'id'>}
+ * @param {Omit<Entrega, 'id'>} dados
  * @returns {Entrega}
  */
 
